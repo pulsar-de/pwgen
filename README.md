@@ -1,2 +1,2 @@
-# pwgen
-a small password generator
+# PwGen
+a small password generator written in lua
