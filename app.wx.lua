@@ -47,7 +47,7 @@ local tool_GeneratePass = tool.GeneratePass
 
 --// app vars
 local app_name         = "PwGen"
-local app_version      = "v0.1"
+local app_version      = "v0.2"
 local app_copyright    = "Copyright (C) by pulsar"
 local app_license      = "GNU General Public License Version 3"
 local app_env          = "Environment: " .. wxlua.wxLUA_VERSION_STRING
@@ -90,6 +90,7 @@ local about_bold     = wx.wxFont( 10, wx.wxMODERN, wx.wxNORMAL, wx.wxFONTWEIGHT_
 local formular_bold  = wx.wxFont( 15, wx.wxMODERN, wx.wxNORMAL, wx.wxFONTWEIGHT_BOLD, false, "Verdana" )
 local formular_bold2 = wx.wxFont( 8,  wx.wxMODERN, wx.wxNORMAL, wx.wxFONTWEIGHT_BOLD, false, "Verdana" )
 local spinctrl_bold = wx.wxFont( 19,  wx.wxMODERN, wx.wxNORMAL, wx.wxFONTWEIGHT_BOLD, false, "Verdana" )
+
 -------------------------------------------------------------------------------------------------------------------------------------
 --// IDS //--------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------------------
@@ -100,12 +101,6 @@ new_id = function() id_counter = id_counter + 1; return id_counter end
 
 --// IDs
 ID_mb_settings = new_id()
-
-
--------------------------------------------------------------------------------------------------------------------------------------
---// HELPER FUNCS //-----------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------
-
 
 -------------------------------------------------------------------------------------------------------------------------------------
 --// MENUBAR & TASKBAR //------------------------------------------------------------------------------------------------------------
@@ -122,14 +117,14 @@ menu_item = function( menu, id, name, status, bmp )
 end
 
 local main_menu = wx.wxMenu()
-main_menu:Append( menu_item( main_menu, wx.wxID_EXIT,  "Beenden" .. "\tF4", "Programm beenden", bmp_exit_16x16 ) )
+main_menu:Append( menu_item( main_menu, wx.wxID_EXIT,  "Close" .. "\tF4", "Closing " .. app_name, bmp_exit_16x16 ) )
 
 local help_menu = wx.wxMenu()
-help_menu:Append( menu_item( help_menu, wx.wxID_ABOUT, "Über" .. "\tF2", "Informationen über das" .. " " .. app_name, bmp_about_16x16 ) )
+help_menu:Append( menu_item( help_menu, wx.wxID_ABOUT, "About" .. "\tF2", "Informations about " .. app_name, bmp_about_16x16 ) )
 
 local menu_bar = wx.wxMenuBar()
-menu_bar:Append( main_menu, "Menü" )
-menu_bar:Append( help_menu, "Hilfe" )
+menu_bar:Append( main_menu, "Menu" )
+menu_bar:Append( help_menu, "Help" )
 
 -------------------------------------------------------------------------------------------------------------------------------------
 --// FRAME & PANEL //----------------------------------------------------------------------------------------------------------------
@@ -147,7 +142,7 @@ frame:SetMenuBar( menu_bar )
 frame:SetIcons( app_icons )
 frame:CreateStatusBar( 2 )
 frame:SetStatusWidths( { ( app_width / 100*80 ), ( app_width / 100*20 ) } )
-frame:SetStatusText( app_name .. " bereit.", 0 )
+frame:SetStatusText( app_name .. " ready.", 0 )
 frame:SetStatusText( "", 1 )
 
 --// main panel for frame
@@ -241,7 +236,7 @@ show_about_window = function()
    local di_abo = wx.wxDialog(
         wx.NULL,
         wx.wxID_ANY,
-        "Über" .. " " .. app_name,
+        "About " .. app_name,
         wx.wxDefaultPosition,
         wx.wxSize( 320, 395 ),
         wx.wxSTAY_ON_TOP + wx.wxDEFAULT_DIALOG_STYLE - wx.wxCLOSE_BOX - wx.wxMAXIMIZE_BOX - wx.wxMINIMIZE_BOX
@@ -302,7 +297,7 @@ show_about_window = function()
     osi_logo:Destroy()
 
     --// button "Schließen"
-    local about_btn_close = wx.wxButton( di_abo, wx.wxID_ANY, "Schließen", wx.wxPoint( 0, 335 ), wx.wxSize( 80, 20 ) )
+    local about_btn_close = wx.wxButton( di_abo, wx.wxID_ANY, "close", wx.wxPoint( 0, 335 ), wx.wxSize( 80, 20 ) )
     about_btn_close:SetBackgroundColour( wx.wxColour( 255, 255, 255 ) )
     about_btn_close:Centre( wx.wxHORIZONTAL )
 
@@ -324,7 +319,8 @@ main = function()
     frame:Show( true )
     frame:Connect( wx.wxEVT_CLOSE_WINDOW,
     function( event )
-        di = wx.wxMessageDialog( frame, "Wirklich beenden?", "Hinweis", wx.wxYES_NO + wx.wxICON_QUESTION + wx.wxCENTRE )
+        di = wx.wxMessageDialog( frame, "Really close?", "Warning", wx.wxYES_NO + wx.wxYES_DEFAULT + wx.wxICON_QUESTION + wx.wxCENTRE )
+        --di:SetYesNoLabels( "Yes", "No" )
         result = di:ShowModal(); di:Destroy()
         if result == wx.wxID_YES then
             if event then event:Skip() end
