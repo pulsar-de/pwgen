@@ -154,7 +154,7 @@ local radioarray = {
 
     [ 1 ] = "letters",
     [ 2 ] = "numbers",
-    [ 3 ] = "special charcters",
+    [ 3 ] = "special characters",
 	[ 4 ] = "letters + numbers",
 	[ 5 ] = "letters + numbers + special characters",
 }
